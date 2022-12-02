@@ -1,14 +1,10 @@
 fun part1(input: List<String>): Int {
-
     var maxRecordedCalorie = 0
-
     var currentElvesCalorieSum = 0
 
     for (line in input) {
-
         when (val calorie = line.toIntOrNull()) {
             null -> currentElvesCalorieSum = 0
-
             else -> currentElvesCalorieSum += calorie
         }
 
@@ -22,7 +18,6 @@ fun part2(input: List<String>): Int = buildList {
     var currentElvesCalorieSum = 0
 
     for (lineIndex in input.indices) {
-
         val calorie = input[lineIndex].toIntOrNull()
 
         when {
@@ -40,9 +35,7 @@ fun part2(input: List<String>): Int = buildList {
     }
 
 
-}.sortedDescending()
-    .take(3)
-    .sum()
+}.sortedDescending().take(3).sum()
 
 fun main() {
 
