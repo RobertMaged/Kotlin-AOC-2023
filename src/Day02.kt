@@ -1,76 +1,67 @@
-/*
-    is the score for the shape you selected (1 for Rock, 2 for Paper, and 3 for Scissors)
-    plus the score for the outcome of the round (0 if you lost, 3 if the round was a draw,
-     and 6 if you won).
- */
+private enum class Game(val initScore: Int) {
+    ROCK(1), PAPER(2), SCISSORS(3);
 
-//      op-me  score
-// Rock  A-X    1
-// Paper B-Y    2
-// Cisso C-Z    3
+    val whatDefeat: Game
+        get() = when (this) {
+            ROCK -> SCISSORS
+            SCISSORS -> PAPER
+            PAPER -> ROCK
+        }
 
-//   lose       0
-//   draw       3
-//   win        6
-
-
-enum class E(val initScore: Int){ROCK(1), PAPER(2),SCISSORS(3) }
-val E.whatDefeat :E
-    get() = when(this){
-    E.ROCK -> E.SCISSORS
-    E.SCISSORS -> E.PAPER
-    E.PAPER -> E.ROCK
 }
-fun E.canDefeat(other: E): Boolean = this.whatDefeat == other
-fun E.playWith(other: E): Int = when{
+
+private fun Game.canDefeat(other: Game): Boolean = this.whatDefeat == other
+
+private fun Game.playWith(other: Game): Int = when {
     this.canDefeat(other) -> 6
     this == other -> 3
     else -> 0
 }
+
 fun main() {
-    val opponentRepresentation = mapOf(
-            "A" to E.ROCK, "B" to E.PAPER, "C" to E.SCISSORS,
+    val opponentGameMap = mapOf(
+            "A" to Game.ROCK, "B" to Game.PAPER, "C" to Game.SCISSORS,
     )
-    fun part1(input: List<String>): Int {
-    val myRepresentation = mapOf("X" to E.ROCK, "Y" to E.PAPER, "Z" to E.SCISSORS )
 
-        var score = 0
+    fun part1(input: List<String>): Int = input.map { round ->
 
-        for (round in input){
-            val(opponent, me) = round.split(" ").let {
+        val (opponentGame, myGame) = round.split(" ").let { (elfRound, myStrategy) ->
 
-                opponentRepresentation.getValue(it.first()) to myRepresentation.getValue(it[1])
+            val opponentElfGame = opponentGameMap.getValue(elfRound)
+
+            val myStrategicGame = when (myStrategy) {
+                "X" -> Game.ROCK
+                "Y" -> Game.PAPER
+                else -> Game.SCISSORS
             }
 
-           score += me.initScore + me.playWith(opponent)
+            return@let opponentElfGame to myStrategicGame
         }
 
-        return score
-    }
+        return@map myGame.initScore + myGame.playWith(opponentGame)
+    }.sum()
 
+    fun part2(input: List<String>): Int = input.map { round ->
 
+        val (opponentGame, myGame) = round.split(" ").let { (elfRound, myStrategy) ->
 
-    fun part2(input: List<String>): Int {
-        val myRepresentation = mapOf("X" to -1, "Y" to 0, "Z" to 1 )
+                    val opponentElfGame = opponentGameMap.getValue(elfRound)
 
-        var score = 0
+                    val myStrategicGame = when (myStrategy) {
+                        // should lose
+                        "X" -> opponentElfGame.whatDefeat
+                        // draw
+                        "Y" -> opponentElfGame
+                        // win
+                        else -> Game.values().first { it != opponentElfGame && it != opponentElfGame.whatDefeat }
+                    }
 
-        for (round in input){
-            val(opponent, myStrategy) = round.split(" ").let {
+                    return@let opponentElfGame to myStrategicGame
+                }
 
-                    opponentRepresentation.getValue(it[0]) to myRepresentation.getValue(it[1])
-            }
-            val me = when(myStrategy){
-                -1 -> opponent.whatDefeat
-                0 -> opponent
-                else -> E.values().first { it != opponent && it != opponent.whatDefeat }
-            }
+        return@map myGame.initScore + myGame.playWith(opponentGame)
+    }.sum()
 
-            score += me.initScore + me.playWith(opponent)
-        }
-
-        return score
-    }
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day02_test")
