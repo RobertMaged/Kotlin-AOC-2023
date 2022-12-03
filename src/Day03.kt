@@ -1,43 +1,28 @@
-private val scale = (('a'..'z') + ('A'..'Z')).mapIndexed { index, c -> c to index+1 }
-        .associate {
-            it
-        }
-
 fun main() {
-    fun part1(input: List<String>): Int {
-var score = 0
-        for (line in input){
-            val (first, second) = line.toCharArray(0, line.length /2) to line.toCharArray(line.length /2)
-
-            score += first.filter { it in second }
-                    .distinct()
-                    .let {
-                        it
-                    }
-                    .sumOf { scale[it]!! } ?:0
-        }
-
-        return score
+    fun Set<Char>.calculatePriority(): Int = sumOf { duplicatedItemChar ->
+        if (duplicatedItemChar.isLowerCase())
+            (duplicatedItemChar.code % 'a'.code) + 1
+        else
+            (duplicatedItemChar.code % 'A'.code) + 27
     }
 
-    fun part2(input: List<String>): Int {
-        var score = 0
-        for (i in input.indices step 3){
-            val (first, second, third) = (i..i+2).map {
-                input[it].toCharArray()
-            }
 
+    fun part1(input: List<String>): Int = input.sumOf { line ->
 
+        val (first, second) = line.chunked(line.length / 2).map { it.toHashSet() }
 
-            score += ((first intersect second.toSet()) intersect third.toSet())
-                    .let {
-                        scale[it.first()] ?: 0
-                    }
-//                    .sumOf { scale[it]!! })
-        }
-
-        return score
+        return@sumOf (first intersect second).calculatePriority()
     }
+
+    fun part2(input: List<String>): Int = input.chunked(3) {
+
+        val (first, second, third) = it.map { it.toHashSet() }
+
+
+        return@chunked (first intersect second intersect third).calculatePriority()
+
+    }.sum()
+
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day03_test")
@@ -47,4 +32,6 @@ var score = 0
     val input = readInput("Day03")
     println(part1(input))
     println(part2(input))
+
+
 }
