@@ -1,4 +1,4 @@
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     var maxRecordedCalorie = 0
     var currentElvesCalorieSum = 0
 
@@ -14,7 +14,7 @@ fun part1(input: List<String>): Int {
     return maxRecordedCalorie
 }
 
-fun part2(input: List<String>): Int = buildList {
+private fun part2(input: List<String>): Int = buildList {
     var currentElvesCalorieSum = 0
 
     for (lineIndex in input.indices) {
