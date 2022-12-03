@@ -19,48 +19,41 @@ private fun Game.playWith(other: Game): Int = when {
 }
 
 fun main() {
-    val opponentGameMap = mapOf(
-            "A" to Game.ROCK, "B" to Game.PAPER, "C" to Game.SCISSORS,
-    )
 
-    fun part1(input: List<String>): Int = input.map { round ->
+    fun List<String>.scoreOfRounds(decideRespondGame: (Game, String) -> Game): Int = sumOf { round ->
+        val opponentGameMap = mapOf(
+                "A" to Game.ROCK, "B" to Game.PAPER, "C" to Game.SCISSORS,
+        )
 
         val (opponentGame, myGame) = round.split(" ").let { (elfRound, myStrategy) ->
 
             val opponentElfGame = opponentGameMap.getValue(elfRound)
-
-            val myStrategicGame = when (myStrategy) {
-                "X" -> Game.ROCK
-                "Y" -> Game.PAPER
-                else -> Game.SCISSORS
-            }
-
-            return@let opponentElfGame to myStrategicGame
+            return@let opponentElfGame to decideRespondGame(opponentElfGame, myStrategy)
         }
 
-        return@map myGame.initScore + myGame.playWith(opponentGame)
-    }.sum()
+        return@sumOf myGame.initScore + myGame.playWith(opponentGame)
+    }
 
-    fun part2(input: List<String>): Int = input.map { round ->
+    fun part1(input: List<String>): Int = input.scoreOfRounds { _, encryptedResponse ->
 
-        val (opponentGame, myGame) = round.split(" ").let { (elfRound, myStrategy) ->
+        return@scoreOfRounds when (encryptedResponse) {
+            "X" -> Game.ROCK
+            "Y" -> Game.PAPER
+            else -> Game.SCISSORS
+        }
+    }
 
-                    val opponentElfGame = opponentGameMap.getValue(elfRound)
+    fun part2(input: List<String>): Int = input.scoreOfRounds { opponentGame, encryptedStrategy ->
 
-                    val myStrategicGame = when (myStrategy) {
-                        // should lose
-                        "X" -> opponentElfGame.whatDefeat
-                        // draw
-                        "Y" -> opponentElfGame
-                        // win
-                        else -> Game.values().first { it != opponentElfGame && it != opponentElfGame.whatDefeat }
-                    }
-
-                    return@let opponentElfGame to myStrategicGame
-                }
-
-        return@map myGame.initScore + myGame.playWith(opponentGame)
-    }.sum()
+       return@scoreOfRounds when (encryptedStrategy) {
+            // should lose
+            "X" -> opponentGame.whatDefeat
+            // draw
+            "Y" -> opponentGame
+            // win
+            else -> Game.values().first { it != opponentGame && it != opponentGame.whatDefeat }
+        }
+    }
 
 
     // test if implementation meets criteria from the description, like:
