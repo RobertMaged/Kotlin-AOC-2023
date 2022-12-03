@@ -14,13 +14,11 @@ fun main() {
         return@sumOf (first intersect second).calculatePriority()
     }
 
-    fun part2(input: List<String>): Int = input.chunked(3) {
+    fun part2(input: List<String>): Int = input.chunked(3) { threeElves ->
 
-        val (first, second, third) = it.map { it.toHashSet() }
-
+        val (first, second, third) = threeElves.map { it.toHashSet() }
 
         return@chunked (first intersect second intersect third).calculatePriority()
-
     }.sum()
 
 
