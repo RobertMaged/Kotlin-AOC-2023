@@ -1,47 +1,30 @@
 fun main() {
-    fun part1(input: List<String>): Int {
-var count = 0
-        for (line in input){
-           val (a, b) = line.split(',').map { val split = it.split('-')
-               split.first().toInt() to split[1].toInt()
-           }
-//                when{
-//                    a[0] <= b[0] && a[2] >= b[2] -> count++
-//                    b[0] <= a[0] && b[2] >= a[2] -> count++
-//                    else -> Unit
-//                }
-        when{
-                    a.first <= b.first && a.second >= b.second -> count++
-                    b.first <= a.first&& b.second >= a.second -> count++
-                    else -> Unit
-                }
-
-
-        }
-
-        return count
+    fun String.splitTwoPairs() = this.split(',').map { onePair ->
+        val (start, end) = onePair.split('-').map { it.toInt() }
+        start..end
     }
 
-    fun part2(input: List<String>): Int {
-        var count = 0
-        for (line in input){
-            val (a, b) = line.split(',').map { val split = it.split('-')
-                split.first().toInt() to split[1].toInt()
-            }
+    fun part1(input: List<String>): Int = input.count { line ->
 
-            if (
-                ((b.first.. b.second) intersect (a.first..a.second)).any()
-                )
-                count++
+        val (a, b) = line.splitTwoPairs()
 
+        // alternative
+//        a.first <= b.first && a.last >= b.last -> count++
+//        b.first <= a.first && b.last >= a.last -> count++
 
-
+        return@count when ((a intersect b).size) {
+            a.count(), b.count() -> true
+            else -> false
         }
-
-        return count
     }
 
-    // test if implementation meets criteria from the description, like:
+    fun part2(input: List<String>): Int = input.count { line ->
+        val (a, b) = line.splitTwoPairs()
+
+        return@count (a intersect b).any()
+    }
+
+
     val testInput = readInput("Day04_test")
     check(part1(testInput).also(::println) == 2)
     check(part2(testInput).also(::println) == 4)
