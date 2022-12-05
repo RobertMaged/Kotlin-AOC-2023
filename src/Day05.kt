@@ -1,19 +1,27 @@
 
 
 fun main() {
-    fun List<String>.splitIt(n: Int): Pair<List<String>, List<Triple<Int, Int,Int>>>{
-        return this.take(n-1) to this.drop(n).map {
-            val count = it.substringAfter("move ").takeWhile { it.isDigit() }.toInt()
-            val from = it.substringAfter("from ").takeWhile { it.isDigit() }.toInt()
-            val to = it.substringAfter("to ").takeWhile { it.isDigit() }.toInt()
-            return@map Triple(count, from, to)
-        }
+    data class RearrangementProcedure(val movesCount: Int, val fromStackAt: Int, val toStackAt: Int)
+
+    fun List<String>.splitStacksFromProcedures() : Pair<List<String>, List<String>>{
+        val stacksCrates = this.takeWhile { it.isNotBlank() }
+        val procedures = this.dropWhile { !it.contains("move") }
+
+        return stacksCrates to procedures
     }
 
-    fun List<String>.getStakes(): Map<Int, ArrayDeque<Char>>{
+    fun List<String>.readProcedures() : List<RearrangementProcedure> = map { instruction ->
+
+        val count = instruction.substringAfter("move ").takeWhile { it.isDigit() }.toInt()
+        val from = instruction.substringAfter("from ").takeWhile { it.isDigit() }.toInt()
+        val to = instruction.substringAfter("to ").takeWhile { it.isDigit() }.toInt()
+
+        return@map RearrangementProcedure(count, from, to)
+    }
+
+    fun List<String>.loadStacksCrates(): Map<Int, ArrayDeque<Char>>{
         val map = mutableMapOf<Int, ArrayDeque<Char>>()
         this.forEach {line ->
-//            line.chunked(4).map { it[1] }.filter { it.isLetter() }
             line.chunked(4).map { it[1] }
                 .mapIndexed{ index, c ->
                     if (c.isLetter().not()) return@mapIndexed
@@ -28,46 +36,47 @@ fun main() {
         return map
     }
 
-
-    fun part1(input: List<String>): String {
-
-        val (top, structures) = input.splitIt(10)
-
-        val map = top.getStakes()
-
-        var score = 0
-
-        for ( (count, from, to) in structures){
-
-            val source = map[from]!!
-            val des = map[to]!!
-
-             (1..count).forEach{ _ ->
-                 des.addLast(source.removeLast())
-            }
-
-        }
+    fun Map<Int, ArrayDeque<Char>>.topCratesAsMsg(): String {
         var s = ""
-        for (i in 1..map.size){
-            s += map[i]!!.last()!!
+        for (i in 1..this.size){
+            s += this[i]!!.last()!!
         }
         return s
     }
 
+    fun List<String>.loadStacksAndProcedures(): Pair<Map<Int, ArrayDeque<Char>>, List<RearrangementProcedure>> {
+        val (stacks, procedures) = this.splitStacksFromProcedures()
+
+        return stacks.loadStacksCrates() to procedures.readProcedures()
+    }
+
+    fun part1(input: List<String>): String {
+
+        val (stacksMap, procedures) = input.loadStacksAndProcedures()
+
+        for ( p in procedures){
+            val source = stacksMap[p.fromStackAt]!!
+            val des = stacksMap[p.toStackAt]!!
+
+             repeat(p.movesCount){ _ ->
+                 des.addLast(source.removeLast())
+            }
+
+        }
+
+        return stacksMap.topCratesAsMsg()
+    }
+
     fun part2(input: List<String>): String {
 
-        val (top, structures) = input.splitIt(10)
+        val (stacksMap, procedures) = input.loadStacksAndProcedures()
 
-        val map = top.getStakes()
+        for ( p in procedures){
+            val source = stacksMap[p.fromStackAt]!!
+            val des = stacksMap[p.toStackAt]!!
 
-
-        for ( (count, from, to) in structures){
-
-            val source = map[from]!!
-            val des = map[to]!!
-
-            var list = mutableListOf<Char>()
-            (1..count).forEach{ _ ->
+            val list = mutableListOf<Char>()
+            (1..p.movesCount).forEach{ _ ->
 
                 list.add(source.removeLast())
             }
@@ -75,11 +84,8 @@ fun main() {
                 des.addLast(c)
 
         }
-        var s = ""
-        for (i in 1..map.size){
-            s += map[i]!!.last()!!
-        }
-        return s
+
+        return stacksMap.topCratesAsMsg()
     }
 
     // test if implementation meets criteria from the description, like:
