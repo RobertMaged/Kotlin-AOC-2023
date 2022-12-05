@@ -1,17 +1,16 @@
 
+private typealias StacksMap = Map<Int, ArrayDeque<Char>>
+data class RearrangementProcedure(val movesCount: Int, val sourceStackNo: Int, val desStackNo: Int)
 
 fun main() {
-    data class RearrangementProcedure(val movesCount: Int, val fromStackAt: Int, val toStackAt: Int)
-
-    fun List<String>.splitStacksFromProcedures() : Pair<List<String>, List<String>>{
+    fun List<String>.splitStacksFromProcedures(): Pair<List<String>, List<String>> {
         val stacksCrates = this.takeWhile { it.isNotBlank() }
         val procedures = this.dropWhile { !it.contains("move") }
 
         return stacksCrates to procedures
     }
 
-    fun List<String>.readProcedures() : List<RearrangementProcedure> = map { instruction ->
-
+    fun List<String>.readProcedures(): List<RearrangementProcedure> = map { instruction ->
         val count = instruction.substringAfter("move ").takeWhile { it.isDigit() }.toInt()
         val from = instruction.substringAfter("from ").takeWhile { it.isDigit() }.toInt()
         val to = instruction.substringAfter("to ").takeWhile { it.isDigit() }.toInt()
@@ -19,49 +18,44 @@ fun main() {
         return@map RearrangementProcedure(count, from, to)
     }
 
-    fun List<String>.loadStacksCrates(): Map<Int, ArrayDeque<Char>>{
-        val map = mutableMapOf<Int, ArrayDeque<Char>>()
-        this.forEach {line ->
-            line.chunked(4).map { it[1] }
-                .mapIndexed{ index, c ->
-                    if (c.isLetter().not()) return@mapIndexed
+    fun List<String>.loadStacksCrates(): StacksMap =
+        fold(mutableMapOf()) { stacksMap, line ->
 
-                    val q = map[index+1]
-                    if (q == null)
-                        map[index+1] = ArrayDeque(listOf(c))
-                    else
-                        q.addFirst(c)
-                }
+            line.chunked(4).forEachIndexed { index, block ->
+                val crate = block[1].takeIf { it.isLetter() } ?: return@forEachIndexed
+
+                val cratesStack = stacksMap[index + 1]
+                if (cratesStack == null)
+                    stacksMap[index + 1] = ArrayDeque(listOf(crate))
+                else
+                    cratesStack.addFirst(crate)
+            }
+
+            return@fold stacksMap
         }
-        return map
-    }
 
-    fun Map<Int, ArrayDeque<Char>>.topCratesAsMsg(): String {
-        var s = ""
-        for (i in 1..this.size){
-            s += this[i]!!.last()!!
-        }
-        return s
-    }
-
-    fun List<String>.loadStacksAndProcedures(): Pair<Map<Int, ArrayDeque<Char>>, List<RearrangementProcedure>> {
+    fun List<String>.loadStacksAndProcedures(): Pair<StacksMap, List<RearrangementProcedure>> {
         val (stacks, procedures) = this.splitStacksFromProcedures()
 
         return stacks.loadStacksCrates() to procedures.readProcedures()
     }
 
+    fun StacksMap.topCratesAsMsg(): String =
+        (1..this.size).fold("") { msgAcc, i ->
+            msgAcc + this.getValue(i).last()
+        }
+
     fun part1(input: List<String>): String {
 
         val (stacksMap, procedures) = input.loadStacksAndProcedures()
 
-        for ( p in procedures){
-            val source = stacksMap[p.fromStackAt]!!
-            val des = stacksMap[p.toStackAt]!!
+        for (p in procedures) {
+            val source = stacksMap.getValue(p.sourceStackNo)
+            val des = stacksMap.getValue(p.desStackNo)
 
-             repeat(p.movesCount){ _ ->
-                 des.addLast(source.removeLast())
+            repeat(p.movesCount) { _ ->
+                des.addLast(source.removeLast())
             }
-
         }
 
         return stacksMap.topCratesAsMsg()
@@ -71,18 +65,14 @@ fun main() {
 
         val (stacksMap, procedures) = input.loadStacksAndProcedures()
 
-        for ( p in procedures){
-            val source = stacksMap[p.fromStackAt]!!
-            val des = stacksMap[p.toStackAt]!!
+        for (p in procedures) {
+            val source = stacksMap.getValue(p.sourceStackNo)
+            val des = stacksMap.getValue(p.desStackNo)
 
-            val list = mutableListOf<Char>()
-            (1..p.movesCount).forEach{ _ ->
-
-                list.add(source.removeLast())
+            val desInputIndex = des.size
+            repeat(p.movesCount) { _ ->
+                des.add(desInputIndex, source.removeLast())
             }
-            for (c in list.reversed())
-                des.addLast(c)
-
         }
 
         return stacksMap.topCratesAsMsg()
