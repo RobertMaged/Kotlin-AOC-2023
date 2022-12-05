@@ -1,6 +1,6 @@
 
 private typealias StacksMap = Map<Int, ArrayDeque<Char>>
-data class RearrangementProcedure(val movesCount: Int, val sourceStackNo: Int, val desStackNo: Int)
+private data class RearrangementProcedure(val movesCount: Int, val sourceStackNo: Int, val desStackNo: Int)
 
 fun main() {
     fun List<String>.splitStacksFromProcedures(): Pair<List<String>, List<String>> {
