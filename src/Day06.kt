@@ -1,23 +1,22 @@
 fun main() {
+    infix fun String.markerIndexIfDistinct(markerDistinctChars: Int) = this.windowed(markerDistinctChars).indexOfFirst {
+        it.toSet().size == it.length
+    } + markerDistinctChars
+
     fun part1(input: String): Int {
+        val markerDistinctChars = 4
 
-
-           return input.windowed(4).indexOfFirst {
-               it.toSet().size == it.length
-           } + 4
+        return input markerIndexIfDistinct markerDistinctChars
 
     }
+
     fun part2(input: String): Int {
 
-           return input.windowed(14).indexOfFirst {
-               it.toSet().size == it.length
-           } + 14
+        val markerDistinctChars = 4
+
+        return input markerIndexIfDistinct markerDistinctChars
 
     }
-
-//    fun part2(input: List<String>): Int {
-//        return input.size
-//    }
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput1("Day06_test")
