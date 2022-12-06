@@ -7,23 +7,23 @@ fun main() {
         val markerDistinctChars = 4
 
         return input markerIndexIfDistinct markerDistinctChars
-
     }
 
     fun part2(input: String): Int {
-
-        val markerDistinctChars = 4
+        val markerDistinctChars = 14
 
         return input markerIndexIfDistinct markerDistinctChars
-
     }
 
     // test if implementation meets criteria from the description, like:
-    val testInput = readInput1("Day06_test")
-//    check(part1(testInput).also(::println) == 5)
-    check(part2(testInput).also(::println) == 19)
+    val testInput = readInput("Day06_test")
+    for (line in testInput)
+        line.split(':')
+            .also { check(it[0].markerIndexIfDistinct(4) == it[1].toInt()) }
+            .also { check(it[0].markerIndexIfDistinct(14) == it[2].toInt()) }
 
-    val input = readInput1("Day06")
+
+    val input = readInputAsText("Day06")
     println(part1(input))
     println(part2(input))
 }
