@@ -1,54 +1,35 @@
 fun main() {
 
     fun part1(input: Array<IntArray>): Int {
-        var score = 0
+        val verticalEdgesCount = input.size * 2
+        val betweenHorizontalEdgesCount = (input.first().size - 2) * 2
 
-        for (rowIndex in input.indices) {
-            for (colIndex in input[rowIndex].indices) {
+        var visibleTreesCount = verticalEdgesCount + betweenHorizontalEdgesCount
 
-                // edge trees
-                if (rowIndex == 0 || rowIndex == input.lastIndex
-                    ||
-                    colIndex == 0 || colIndex == input[colIndex].lastIndex
-                ) {
-                    score++
-                    continue
-                }
-
+        for (rowIndex in 1 until input.lastIndex) {
+            for (colIndex in 1 until input.first().lastIndex) {
 
                 val currTree = input[rowIndex][colIndex]
                 when {
                     //left
-                    input[rowIndex].take(colIndex).all { currTree > it } -> score++
+                    input[rowIndex].take(colIndex).all { currTree > it } -> visibleTreesCount++
                     //right
-                    input[rowIndex].drop(colIndex + 1).all { currTree > it } -> score++
+                    input[rowIndex].drop(colIndex + 1).all { currTree > it } -> visibleTreesCount++
                     //top
-                    input.take(rowIndex).all { currTree > it[colIndex] } -> score++
+                    input.take(rowIndex).all { currTree > it[colIndex] } -> visibleTreesCount++
                     //bottom
-                    input.drop(rowIndex + 1).all { currTree > it[colIndex] } -> score++
+                    input.drop(rowIndex + 1).all { currTree > it[colIndex] } -> visibleTreesCount++
                 }
-
             }
         }
-
-        return score
+        return visibleTreesCount
     }
 
-
     fun part2(input: Array<IntArray>): Int {
-        var score = 0
+        var viewingDistanceScore = 0
 
-        for (rowIndex in input.indices) {
-
-            for (colIndex in input[rowIndex].indices) {
-
-                // edge trees
-                if (
-                    rowIndex == 0 || rowIndex == input.lastIndex
-                    ||
-                    colIndex == 0 || colIndex == input[colIndex].lastIndex
-                ) continue
-
+        for (rowIndex in 1 until input.lastIndex) {
+            for (colIndex in 1 until input.first().lastIndex) {
 
                 val currTree = input[rowIndex][colIndex]
 
@@ -57,12 +38,13 @@ fun main() {
                 val bottom = input.drop(rowIndex + 1).takeWhileInclusive { currTree > it[colIndex] }.size
                 val top = input.take(rowIndex).asReversed().takeWhileInclusive { currTree > it[colIndex] }.size
 
-                score = maxOf(score, (top * left * right * bottom))
+                viewingDistanceScore = maxOf(viewingDistanceScore, (top * left * right * bottom))
             }
         }
 
-        return score
+        return viewingDistanceScore
     }
+
 
 // test if implementation meets criteria from the description, like:
     val testInput = readInputAs2DIntArray("Day08_test")
