@@ -11,6 +11,12 @@ fun readInput(name: String) = File("src/resources", "$name.txt")
 fun readInputAsText(name: String) = File("src/resources", "$name.txt")
     .readText()
 
+fun readInputAs2DIntArray(name: String) = readInput(name)
+    .map { line -> line.map { it.digitToInt() }.toIntArray() }.toTypedArray()
+
+fun readInputAs2DIntList(name: String) = readInput(name)
+    .map { line -> line.map { it.digitToInt() } }
+
 /**
  * Converts string to md5 hash.
  */

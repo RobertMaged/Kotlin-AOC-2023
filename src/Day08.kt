@@ -1,120 +1,85 @@
 fun main() {
-    fun part1(input: List<String>): Int {
 
-        val array = mutableListOf<IntArray>()
-
+    fun part1(input: Array<IntArray>): Int {
         var score = 0
 
-        for ((i, line) in input.withIndex()) {
-            array.add(i, line.toCharArray().map { it.digitToInt() }.toIntArray())
-        }
+        for (rowIndex in input.indices) {
+            for (colIndex in input[rowIndex].indices) {
 
-
-        for (i in array.indices) {
-
-            for (j in array[i].indices) {
-                score += when {
-                    i == 0 -> 1
-                    i == array.lastIndex -> 1
-                    j == 0 -> 1
-                    j == array[j].lastIndex -> 1
-
-
-                    else -> {
-                        val curr = array[i][j]
-                        if (array[i].take(j).all { curr > it } || array[i].drop(j + 1).all { curr > it })
-                            1
-                        else if (array.take(i).all { curr > it[j] } || array.drop(i + 1).all { curr > it[j] })
-                            1
-                        else
-                            0
-                    }
+                // edge trees
+                if (rowIndex == 0 || rowIndex == input.lastIndex
+                    ||
+                    colIndex == 0 || colIndex == input[colIndex].lastIndex
+                ) {
+                    score++
+                    continue
                 }
+
+
+                val currTree = input[rowIndex][colIndex]
+                when {
+                    //left
+                    input[rowIndex].take(colIndex).all { currTree > it } -> score++
+                    //right
+                    input[rowIndex].drop(colIndex + 1).all { currTree > it } -> score++
+                    //top
+                    input.take(rowIndex).all { currTree > it[colIndex] } -> score++
+                    //bottom
+                    input.drop(rowIndex + 1).all { currTree > it[colIndex] } -> score++
+                }
+
             }
-
         }
-
 
         return score
     }
 
-    fun part2(input: List<String>): Int {
 
-        val array = mutableListOf<IntArray>()
-
+    fun part2(input: Array<IntArray>): Int {
         var score = 0
 
-        for ((i, line) in input.withIndex()) {
-            array.add(i, line.toCharArray().map { it.digitToInt() }.toIntArray())
-        }
+        for (rowIndex in input.indices) {
+
+            for (colIndex in input[rowIndex].indices) {
+
+                // edge trees
+                if (
+                    rowIndex == 0 || rowIndex == input.lastIndex
+                    ||
+                    colIndex == 0 || colIndex == input[colIndex].lastIndex
+                ) continue
 
 
-        for (i in array.indices) {
+                val currTree = input[rowIndex][colIndex]
 
-            for (j in array[i].indices) {
-                when {
-                    i == 0 -> continue
-                    i == array.lastIndex -> continue
-                    j == 0 -> continue
-                    j == array[j].lastIndex -> continue
-                }
-
-
-                var cou = 1
-                val curr = array[i][j]
-
-                var lastBoundIndex = 0
-                // left right
-
-                var right = 0
-                for ((k, c) in array[i].drop (j+1).withIndex()){
-                        right++
-                    if (c >= curr)
-                        break
-                }
-
-                var left = 0
-                for (c in array[i].take(j).asReversed()){
-                    left++
-                    if (c>= curr) break
-                }
-
-                var bottom = 0
-                for (r in array.drop(i+1)){
-                    bottom++
-                    if (r[j]>= curr) break
-                }
-
-                var top = 0
-                for (r in array.take(i).asReversed()){
-                    top++
-                    if (r[j]>= curr) break
-                }
+                val right = input[rowIndex].drop(colIndex + 1).takeWhileInclusive { currTree > it }.size
+                val left = input[rowIndex].take(colIndex).asReversed().takeWhileInclusive { currTree > it }.size
+                val bottom = input.drop(rowIndex + 1).takeWhileInclusive { currTree > it[colIndex] }.size
+                val top = input.take(rowIndex).asReversed().takeWhileInclusive { currTree > it[colIndex] }.size
 
                 score = maxOf(score, (top * left * right * bottom))
-//
-//                cou *= array[i].take(j).asReversed().let { maxOf(it.indexOfFirst { curr <= it }, 1) } + 1
-//                cou *= array[i].drop(j + 1).let { maxOf(it.indexOfFirst { curr <= it }, 1) } + 1
-//
-//                cou *= array.take(i).asReversed().let { maxOf(it.indexOfFirst { curr <= it[j] }, 1) } + 1
-//                cou *= array.drop(i + 1).let { maxOf(it.indexOfFirst { curr <= it[j] }, 1) } + 1
-//
-//                log += cou
             }
         }
-
-
-
 
         return score
     }
 
-    // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day08_test")
+// test if implementation meets criteria from the description, like:
+    val testInput = readInputAs2DIntArray("Day08_test")
     check(part1(testInput).also(::println) == 21)
     check(part2(testInput).also(::println) == 8)
 
-    val input = readInput("Day08")
+    val input = readInputAs2DIntArray("Day08")
     println(part1(input))
     println(part2(input))
+}
+
+private fun <T> List<T>.takeWhileInclusive(predicate: (T) -> Boolean): List<T> {
+    val list = ArrayList<T>()
+    for (item in this) {
+        list.add(item)
+        if (!predicate(item))
+            break
+    }
+    return list
 }
