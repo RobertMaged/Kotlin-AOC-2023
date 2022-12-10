@@ -20,16 +20,23 @@ fun main() {
     }.sum()
 
     fun part2(input: List<String>): String = buildString {
-        val spiritPosition = List(40) { if (it < 3) "#" else "." }.toMutableList()
+        var spiritMiddleIndex = 1
 
         input.designEachCycleAddedX().forEachIndexed { index, add ->
 
-             append(spiritPosition[index % 40])
+            val rowDrawingIndex = (index % 40)
+            append(
+                // like "i in (-1..1)"
+                if (spiritMiddleIndex - 1 <= rowDrawingIndex && rowDrawingIndex <= spiritMiddleIndex + 1)
+                    '#'
+                else
+                    '.'
+            )
 
-            if ((index + 1) % 40 == 0) {
+            if ((index + 1) % 40 == 0)
                 appendLine()
-            }
-            Collections.rotate(spiritPosition, add)
+
+            spiritMiddleIndex += add
         }
     }
 
@@ -41,15 +48,29 @@ fun main() {
     val input = readInput("Day10")
     println(part1(input))
     println(part2(input))
-//    part2(input)
-    println(part2ExampleResult)
+
+
+
+
+    fun part2Variant(input: List<String>): String = buildString {
+        val spiritPosition = List(40) { if (it < 3) "#" else "." }.toMutableList()
+
+        input.designEachCycleAddedX().forEachIndexed { index, add ->
+
+            append(spiritPosition[index % 40])
+
+            if ((index + 1) % 40 == 0) {
+                appendLine()
+            }
+            Collections.rotate(spiritPosition, add)
+        }
+    }
 }
 
-private val part2ExampleResult = """
-    ##..##..##..##..##..##..##..##..##..##..
-    ###...###...###...###...###...###...###.
-    ####....####....####....####....####....
-    #####.....#####.....#####.....#####.....
-    ######......######......######......####
-    #######.......#######.......#######.....
-""".trimIndent()
+private const val part2ExampleResult =
+    """##..##..##..##..##..##..##..##..##..##..
+###...###...###...###...###...###...###.
+####....####....####....####....####....
+#####.....#####.....#####.....#####.....
+######......######......######......####
+#######.......#######.......#######....."""
