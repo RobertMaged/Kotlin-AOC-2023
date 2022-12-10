@@ -1,79 +1,55 @@
 import java.util.Collections
 
 fun main() {
-    fun part1(input: List<String>): Int {
-        var products = mutableListOf<Int>()
-        val x = listOf(1) + input.flatMap { line ->
-            val ins = line.takeWhile { it.isLetter() }
+    fun List<String>.designEachCycleAddedX() = flatMap { line ->
+        val instructionSplit = line.split(" ")
 
-            if (ins == "noop") {
-                listOf(0)
-            } else {
-
-                val n = line.dropWhile { (it != '-' && it.isLetter()) || it == ' ' }
-
-                listOf(0, n.toInt())
-            }
-        }.foldIndexed(1) { index, acc, add ->
-            if (index + 1 in listOf(20, 60, 100, 140, 180, 220))
-                products.add((index + 1) * acc)
-
-            acc + add
-        }
-
-
-        return products.sum()
+        return@flatMap if (instructionSplit.first() == "noop")
+            listOf(0)
+        else
+            listOf(0, instructionSplit[1].toInt())
     }
 
-    fun part2(input: List<String>): Int {
-        val spiritPosititon = List(40) { if (it < 3) '#' else '.' }.toMutableList()
+    fun part1(input: List<String>): Int = signalStrengths@ buildList<Int> {
+        input.designEachCycleAddedX().foldIndexed(1) { index, registerX, add ->
+            if (index + 1 in listOf(20, 60, 100, 140, 180, 220))
+                add((index + 1) * registerX)
 
-/*        for (line in input){
-            val ins = line.takeWhile { it.isLetter() }
-            var curr = 0
-            if (ins == "noop") {
-//                listOf(0)
-            } else {
-
-                val n = line.dropWhile { (it != '-' && it.isLetter()) || it == ' ' }
-
-                curr = n.toInt()
-            }
-        }*/
-
-        input.flatMap { line ->
-            val ins = line.takeWhile { it.isLetter() }
-
-            if (ins == "noop") {
-                listOf(0)
-            } else {
-
-                val n = line.dropWhile { (it != '-' && it.isLetter()) || it == ' ' }
-
-                listOf(0, n.toInt())
-            }
-        }.foldIndexed(1) { index, acc, add ->
-            require(spiritPosititon.size == 40)
-
-            val pixel = (index ) % 40
-            print(spiritPosititon[pixel])
-            if ((index + 1) % 40 == 0) {
-                println()
-            }
-            Collections.rotate(spiritPosititon, add )
-//println(spiritPosititon.joinToString(separator = ""))
-            acc + add
+            return@foldIndexed registerX + add
         }
-        return input.size
+    }.sum()
+
+    fun part2(input: List<String>): String = buildString {
+        val spiritPosition = List(40) { if (it < 3) "#" else "." }.toMutableList()
+
+        input.designEachCycleAddedX().forEachIndexed { index, add ->
+
+             append(spiritPosition[index % 40])
+
+            if ((index + 1) % 40 == 0) {
+                appendLine()
+            }
+            Collections.rotate(spiritPosition, add)
+        }
     }
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day10_test")
-//    check(part1(testInput).also(::println) == 13140)
-//    check(part2(testInput).also(::println) == 1)
+    check(part1(testInput).also(::println) == 13140)
+//    check(part2(testInput).also(::println) == part2ExampleResult)
 
     val input = readInput("Day10")
-//    println(part1(input))
-//    println(part2(input))
-    part2(input)
+    println(part1(input))
+    println(part2(input))
+//    part2(input)
+    println(part2ExampleResult)
 }
+
+private val part2ExampleResult = """
+    ##..##..##..##..##..##..##..##..##..##..
+    ###...###...###...###...###...###...###.
+    ####....####....####....####....####....
+    #####.....#####.....#####.....#####.....
+    ######......######......######......####
+    #######.......#######.......#######.....
+""".trimIndent()
