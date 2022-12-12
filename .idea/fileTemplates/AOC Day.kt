@@ -8,12 +8,15 @@ fun main() {
         return input.size
     }
 
-    // test if implementation meets criteria from the description, like:
+     // parts execution   
     val testInput = readInput("Day${DAY_NUMBER_FULL}_test")
-    check(part1(testInput).also(::println) == 1)
-    //check(part2(testInput).also(::println) == 1)
-
     val input = readInput("Day${DAY_NUMBER_FULL}")
-    println(part1(input))
-    println(part2(input))
+
+    part1(testInput).checkEquals(TODO())
+    part1(input)
+        .sendAnswer(part = 1, day = "${DAY_NUMBER_FULL}", year = 2022)
+
+    part2(testInput).checkEquals(TODO())
+    part2(input)
+        .sendAnswer(part = 2, day = "${DAY_NUMBER_FULL}", year = 2022)
 }

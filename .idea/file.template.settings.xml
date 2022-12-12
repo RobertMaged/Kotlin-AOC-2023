@@ -3,11 +3,11 @@
   <component name="ExportableFileTemplateSettings">
     <default_templates>
       <template name="AOC Day.kt" file-name="Day${DAY_NUMBER_FULL}.kt" reformat="true" live-template-enabled="false">
-        <template name="AOC Day.kt.child.0.txt" file-name="${DIR_PATH}/resources/Day${DAY_NUMBER_FULL}_test" reformat="true" live-template-enabled="false" />
-        <template name="AOC Day.kt.child.1.txt" file-name="${DIR_PATH}/resources/Day${DAY_NUMBER_FULL}" reformat="true" live-template-enabled="false" />
+        <template name="AOC Day.kt.child.0.txt" file-name="${DIR_PATH}/resources/Day${DAY_NUMBER_FULL}" reformat="true" live-template-enabled="false" />
+        <template name="AOC Day.kt.child.1.txt" file-name="${DIR_PATH}/resources/Day${DAY_NUMBER_FULL}_test" reformat="true" live-template-enabled="false" />
       </template>
-      <template name="AOC Day.kt.child.0.txt" file-name="${DIR_PATH}/resources/Day${DAY_NUMBER_FULL}_test" reformat="true" live-template-enabled="false" />
-      <template name="AOC Day.kt.child.1.txt" file-name="${DIR_PATH}/resources/Day${DAY_NUMBER_FULL}" reformat="true" live-template-enabled="false" />
+      <template name="AOC Day.kt.child.0.txt" file-name="${DIR_PATH}/resources/Day${DAY_NUMBER_FULL}" reformat="true" live-template-enabled="false" />
+      <template name="AOC Day.kt.child.1.txt" file-name="${DIR_PATH}/resources/Day${DAY_NUMBER_FULL}_test" reformat="true" live-template-enabled="false" />
     </default_templates>
   </component>
 </project>
