@@ -25,7 +25,13 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        val packet2 = listOf(listOf(2))
+        val packet6 = listOf(listOf(6))
+        val addedPackets = (listOf(packet2, packet6) + data + data2)
+
+        val sorted = addedPackets.sortedWith(::look)
+
+        return (sorted.indexOfFirst { it === packet2 } + 1) * (sorted.indexOfFirst { it === packet6 } + 1)
     }
 
     // parts execution
@@ -34,9 +40,9 @@ fun main() {
 
 //    part1(testInput).checkEquals(13)
     part1(input)
-        .sendAnswer(part = 1, day = "13", year = 2022)
+//        .sendAnswer(part = 1, day = "13", year = 2022)
 
-    part2(testInput).checkEquals(TODO())
+//    part2(testInput).checkEquals(140)
     part2(input)
-        .sendAnswer(part = 2, day = "13", year = 2022)
+//        .sendAnswer(part = 2, day = "13", year = 2022)
 }
