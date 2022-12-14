@@ -29,15 +29,36 @@ fun main() {
     val testInput = readInput("Day14_test")
     val input = readInput("Day14")
 
-    part1(testInput).checkEquals(24)
-    part1(input)
+    Day14.part1(testInput).checkEquals(24)
+    Day14.part1(input)
         .checkEquals(979)
 //        .sendAnswer(part = 1, day = "14", year = 2022)
 
-    part2(testInput).checkEquals(93)
-    part2(input)
+    Day14.part2(testInput).checkEquals(93)
+    Day14.part2(input)
         .checkEquals(29044)
 //        .sendAnswer(part = 2, day = "14", year = 2022)
+}
+
+object Day14 {
+    val input get() = readInput("Day14")
+    fun part1(input: List<String>): Int {
+        var highestY = -1
+        val cave2D = input.scanCave { maxY, _ -> highestY = maxY }
+
+        return cave2D.startSandFlowThenCount(highestY)
+    }
+
+    fun part2(input: List<String>): Int {
+        var highestY = -1
+        val cave2D = input.scanCave(afterScanTransform = { maxY, cave ->
+            highestY = maxY
+            cave[highestY + 2] = cave[highestY + 2].map { ROCK }.toIntArray()
+        })
+
+        return cave2D.startSandFlowThenCount(highestY + 2)
+    }
+
 }
 
 private typealias Cave2D = Array<IntArray>
