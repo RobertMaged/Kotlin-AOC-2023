@@ -4,15 +4,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-/**
- * [Constants] is a **Must** implemented class to inject secret headers in it.
- */
 object Constants {
     private val prop: HashMap<String, String> = hashMapOf()
     operator fun set(key: String, value: String) {
@@ -42,24 +37,9 @@ fun sendResult(day: String, part: Int, answer: String, year: Int = 2022) {
     require(intDay in 1..25)
     require(part == 1 || part == 2)
 
-    val answerResponse = AOCRemote.sendAnswer(intDay, part, answer, year).execute()
+    val response = AOCRemote.sendAnswer(intDay, part, answer, year).execute()
 
-    var answerResult = answerResponse.body()?.let(::parseAnswerResult) ?: return
-
-    if (answerResult.contains("Success Answer")) {
-        val rankResponse = AOCRemote.getRank(year).execute()
-
-        val dayRank = rankResponse.body()?.let { parseAndGetRank(it, intDay) }
-
-        val neededPart = if (part == 1) dayRank?.part1 else dayRank?.part2
-
-        if (neededPart != null)
-        answerResult = answerResult
-            .replaceFirst("\n", "\nrank->  ${neededPart.rank}\ntaken time->  ${neededPart.time}\n")
-
-    }
-
-    println(answerResult)
+    println(parseAnswerResult(response.body() ?: response.message()))
 }
 
 private fun parseAnswerResult(response: String): String {
@@ -82,29 +62,6 @@ private fun parseAnswerResult(response: String): String {
             formatted.replace("(,|\\.|!) ".toRegex(), "$1\n")
 }
 
-data class DayRank(val day: Int, val part1: Part, val part2: Part) {
-    data class Part(val level: String, val time: String, val rank: String)
-}
-
-private fun parseAndGetRank(response: String, day: Int): DayRank? {
-    val rankLinesWithHeaders =
-        response.substringAfter("<pre>", "<article> not found while parsing").substringBefore("\n</pre>").split('\n')
-
-    val headersIndex = rankLinesWithHeaders.indexOfFirst { it.startsWith("Day") }
-
-    val days = rankLinesWithHeaders.drop(headersIndex+1)
-
-    return days.firstOrNull { it.contains("\\s+$day".toRegex()) }?.let { d ->
-        val (part1Cols, part2Cols) = d.split("\\s+".toRegex()).drop(1).chunked(3)
-
-        DayRank(
-            day,
-            DayRank.Part(part1Cols[0], part1Cols[1], part1Cols[2]),
-            DayRank.Part(part2Cols[0], part2Cols[1], part2Cols[2])
-        )
-    }
-
-}
 
 private val AOCRemote by lazy {
     val url = "https://adventofcode.com/"
@@ -158,28 +115,6 @@ private interface AOC {
         @Path("day") day: Int,
         @Field("level") level: Int,
         @Field("answer") answer: String,
-        @Path("year") year: Int = 2022,
-        @Header("referer") referer: String = "https://adventofcode.com/$year/day/$day"
-
+        @Path("year") year: Int = 2022
     ): Call<String>
-
-    @Headers(
-        """accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8""",
-        """accept-language: en-US,en;q=0.9""",
-        "cache-control: max-age=0",
-        "content-length: 21",
-        "content-type: application/x-www-form-urlencoded",
-        "dnt: 1",
-        "origin: https://adventofcode.com",
-        "sec-ch-ua-mobile: ?0",
-        """sec-ch-ua-platform: "Linux"""",
-        "sec-fetch-dest: document",
-        "sec-fetch-mode: navigate",
-        "sec-fetch-site: same-origin",
-        "sec-fetch-user: ?1",
-        "sec-gpc: 1",
-        "upgrade-insecure-requests: 1",
-    )
-    @GET("{year}/leaderboard/self")
-    fun getRank(@Path("year") year: Int = 2022): Call<String>
 }
