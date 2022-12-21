@@ -8,6 +8,23 @@ private const val SAND = 1
 private val SAND_START_POINT = Vertex(500, 0)
 fun main() {
 
+    // parts execution
+    val testInput = readInput("Day14_test")
+    val input = readInput("Day14")
+
+    Day14.part1(testInput).checkEquals(24)
+    Day14.part1(input)
+        .checkEquals(979)
+//        .sendAnswer(part = 1, day = "14", year = 2022)
+
+    Day14.part2(testInput).checkEquals(93)
+    Day14.part2(input)
+        .checkEquals(29044)
+//        .sendAnswer(part = 2, day = "14", year = 2022)
+}
+
+object Day14 {
+    val input get() = readInput("Day14")
     fun part1(input: List<String>): Int {
         var highestY = -1
         val cave2D = input.scanCave { maxY, _ -> highestY = maxY }
@@ -25,19 +42,6 @@ fun main() {
         return cave2D.startSandFlowThenCount(highestY + 2)
     }
 
-    // parts execution
-    val testInput = readInput("Day14_test")
-    val input = readInput("Day14")
-
-    part1(testInput).checkEquals(24)
-    part1(input)
-        .checkEquals(979)
-//        .sendAnswer(part = 1, day = "14", year = 2022)
-
-    part2(testInput).checkEquals(93)
-    part2(input)
-        .checkEquals(29044)
-//        .sendAnswer(part = 2, day = "14", year = 2022)
 }
 
 private typealias Cave2D = Array<IntArray>
