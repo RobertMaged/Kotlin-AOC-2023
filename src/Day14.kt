@@ -8,23 +8,6 @@ private const val SAND = 1
 private val SAND_START_POINT = Vertex(500, 0)
 fun main() {
 
-    fun part1(input: List<String>): Int {
-        var highestY = -1
-        val cave2D = input.scanCave { maxY, _ -> highestY = maxY }
-
-        return cave2D.startSandFlowThenCount(highestY)
-    }
-
-    fun part2(input: List<String>): Int {
-        var highestY = -1
-        val cave2D = input.scanCave(afterScanTransform = { maxY, cave ->
-            highestY = maxY
-            cave[highestY + 2] = cave[highestY + 2].map { ROCK }.toIntArray()
-        })
-
-        return cave2D.startSandFlowThenCount(highestY + 2)
-    }
-
     // parts execution
     val testInput = readInput("Day14_test")
     val input = readInput("Day14")

@@ -1,6 +1,6 @@
 package src
 import Day14
-import org.openjdk.jmh.annotations .Benchmark
+import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Fork
 import org.openjdk.jmh.annotations.Measurement
 import org.openjdk.jmh.annotations.Scope
