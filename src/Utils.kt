@@ -66,6 +66,15 @@ data class Vertex(val x: Int, val y: Int) {
     fun downLeft(downSteps: Int = 1, leftSteps: Int = 1) = down(downSteps).left(leftSteps)
     fun downRight(downSteps: Int = 1, rightSteps: Int = 1) = down(downSteps).right(rightSteps)
 
+    fun allAdjacent() = setOf(
+        up(), topLeft(), topRight(), down(), downLeft(), downRight(), left(), right(),
+    )
+
+    fun northAdjacent() = setOf(up(), topLeft(), topRight())
+    fun southAdjacent() = setOf(down(), downLeft(), downRight())
+    fun westAdjacent() = setOf(left(), topLeft(), downLeft())
+    fun eastAdjacent() = setOf(right(), topRight(), downRight())
+
     companion object {
         fun ofDestructuringStrings(orderedXY: List<String>) =
             Vertex(orderedXY.first().toInt(), orderedXY[1].toInt())
