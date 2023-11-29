@@ -5,20 +5,21 @@ import java.security.MessageDigest
 /**
  * Reads lines from the given input txt file.
  */
-fun readInput(name: String) = File("src/resources", "$name.txt")
+fun readInput(name: String, sub: String) = File("src/$sub/resources", "$name.txt")
     .readLines()
 
-fun readInputAsText(name: String) = File("src/resources", "$name.txt")
+fun readInputAsText(name: String, sub: String) = File("src/$sub/resources", "$name.txt")
     .readText()
 
-fun readInputAs2DIntArray(name: String) = readInput(name)
+fun readInputAs2DIntArray(name: String, sub: String) = readInput(name, sub)
     .map { line -> line.map { it.digitToInt() }.toIntArray() }.toTypedArray()
-inline fun Array<IntArray>.cloneOf2D() = this.map { it.clone() }.toTypedArray()
 
-fun readInputAs2DCharArray(name: String) = readInput(name)
+fun readInputAs2DCharArray(name: String, sub: String) = readInput(name, sub)
     .map { line -> line.toCharArray()}.toTypedArray()
 
 inline fun Array<CharArray>.cloneOf2D() = this.map { it.clone() }.toTypedArray()
+
+inline fun Array<IntArray>.cloneOf2D() = this.map { it.clone() }.toTypedArray()
 
 inline fun Array<IntArray>.getOrDefault(ver: Vertex, defaultValue: Int): Int {
     return this.getOrNull(ver.y)?.getOrNull(ver.x) ?: defaultValue
@@ -92,13 +93,13 @@ fun String.checkEquals(expected: String): String = this.also { check(it == expec
 inline fun <reified T: Number> T.checkEquals(expected: T): T = this.also { check(it == expected){"\nExpected: $expected\nFound: $this"} }
 inline fun <reified T: Number> T.checkNotEquals(notExpected: T): T = this.also { check(it != notExpected){"\nThe not expected value is Found: $notExpected\n"} }
 
-fun String.sendAnswer(part: Int, day:String, year: Int = 2022) = sendResult(
+fun String.sendAnswer(part: Int, day:String, year: Int) = sendResult(
     day = day,
     part = part,
     answer = this,
     year = year
 )
-inline fun <reified T: Number> T.sendAnswer(part: Int, day:String, year: Int = 2022) = sendResult(
+inline fun <reified T: Number> T.sendAnswer(part: Int, day:String, year: Int) = sendResult(
     day = day,
     part = part,
     answer = this.toString(),
