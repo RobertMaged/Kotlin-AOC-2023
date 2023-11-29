@@ -1,7 +1,7 @@
 package aoc2022
 
-import checkEquals
-import cloneOf2D
+import utils.checkEquals
+import utils.cloneOf2D
 
 
 private typealias Ver = Pair<Int, Int>

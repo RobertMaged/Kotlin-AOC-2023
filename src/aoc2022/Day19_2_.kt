@@ -1,9 +1,9 @@
 package aoc2022
 
-import alsoPrintln
-import checkEquals
+import utils.alsoPrintln
+import utils.checkEquals
 
-import sendAnswer
+import utils.sendAnswer
 import kotlin.math.max
 
 private sealed class Robot3(val name: String) {
@@ -318,8 +318,8 @@ private val FactoryState.clayRobot get() = map[1] as Robot.Clay
 private val FactoryState.obsidianRobot get() = map[2] as Robot.Obsidian
 private val FactoryState.geodeRobot get() = map[3] as Robot.Geode
 /*
-private val FactoryState.oreRobot get() = map.getValue("Ore") as Robot.Ore
-private val FactoryState.clayRobot get() = map.getValue("Clay") as Robot.Clay
-private val FactoryState.obsidianRobot get() = map.getValue("Obsidian") as Robot.Obsidian
-private val FactoryState.geodeRobot get() = map.getValue("Geode") as Robot.Geode
+private val FactoryState.oreRobot utils.get() = map.getValue("Ore") as Robot.Ore
+private val FactoryState.clayRobot utils.get() = map.getValue("Clay") as Robot.Clay
+private val FactoryState.obsidianRobot utils.get() = map.getValue("Obsidian") as Robot.Obsidian
+private val FactoryState.geodeRobot utils.get() = map.getValue("Geode") as Robot.Geode
 */

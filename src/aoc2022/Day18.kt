@@ -1,8 +1,8 @@
 package aoc2022
 
-import checkEquals
+import utils.checkEquals
 
-import sendAnswer
+import utils.sendAnswer
 
 private data class Coor3D(val x: Int, val y: Int, val z: Int)
 

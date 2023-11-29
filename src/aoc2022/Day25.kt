@@ -1,6 +1,6 @@
 package aoc2022
 
-import checkEquals
+import utils.checkEquals
 
 import kotlin.math.roundToLong
 

@@ -1,7 +1,7 @@
 package aoc2022
 
-import Vertex
-import checkEquals
+import utils.Vertex
+import utils.checkEquals
 
 
 private typealias Elf = Vertex

@@ -1,8 +1,8 @@
 package aoc2022
 
-import checkEquals
+import utils.checkEquals
 
-import sendAnswer
+import utils.sendAnswer
 
 private typealias Num = Pair<Int, Long>
 private val Num.value get() = second

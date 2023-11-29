@@ -1,9 +1,9 @@
 package aoc2022
 
-import Vertex
-import checkEquals
+import utils.Vertex
+import utils.checkEquals
 
-import sendAnswer
+import utils.sendAnswer
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -23,7 +23,7 @@ fun main() {
         val counted = mutableSetOf<Int>()
         val becons = mutableSetOf<Int>()
         // steps from s to its becon , then add s+steps see it is in y
-        val score = sToBMap/*.filter { it.key == Vertex(8, 7) }*/.forEach { (s, b) ->
+        val score = sToBMap/*.filter { it.key == utils.Vertex(8, 7) }*/.forEach { (s, b) ->
             val xSteps = abs(s.x - b.x)
             val ySteps = abs(s.y - b.y)
             if (y == b.y) {
@@ -83,8 +83,8 @@ fun main() {
 
         var inBounds = { s: Vertex ->
 //            listOf(
-//                Vertex(xR.first, yR.first), Vertex(xR.last, yR.first),
-//                Vertex(xR.first, yR.last), Vertex(xR.last, yR.last)
+//                utils.Vertex(xR.first, yR.first), utils.Vertex(xR.last, yR.first),
+//                utils.Vertex(xR.first, yR.last), utils.Vertex(xR.last, yR.last)
 //            )
             s.y in yR && s.x in xR
         }
@@ -108,8 +108,8 @@ fun main() {
         }
 
         /* sToBMap.forEach { s, b ->
-             val que = ArrayDeque<Vertex>(listOf(s).filter(inBounds))
-             val visted = mutableSetOf<Vertex>()
+             val que = ArrayDeque<utils.Vertex>(listOf(s).filter(inBounds))
+             val visted = mutableSetOf<utils.Vertex>()
 
              while (que.any()) {
                  val v = que.removeFirst()
@@ -173,7 +173,7 @@ fun main() {
         error("Can't find distressed beacon")
     }
 
-    fun readInput(input: List<String>): List<Day15Input> {
+    fun utils.readInput(input: List<String>): List<Day15Input> {
         val sensorToDistance = input.map { s ->
             val (sensor, beacon) = "(x=|y=)(-?\\d+)"
                 .toRegex().findAll(s)
@@ -188,7 +188,7 @@ fun main() {
     }
 
     fun part1(input: List<String>, row: Int): Int {
-        val sensorToBeacon = readInput(input)
+        val sensorToBeacon = utils.readInput(input)
         val sensors = sensorToBeacon.map { it.sensor }.toSet()
         val beacons = sensorToBeacon.map { it.beacon }.toSet()
         val ranges = sensorToBeacon.toRanges(row)
@@ -202,19 +202,19 @@ fun main() {
     }
 
     fun part2(input: List<String>, maxSize: Int): Long {
-        val sensorToDistance = readInput(input)
+        val sensorToDistance = utils.readInput(input)
         val (x, y) = findDistressedBeacon(sensorToDistance, maxSize)
         return x * 4000000L + y
     }
 
     // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day15_test")
+    val testInput = utils.readInput("Day15_test")
     println(part1(testInput, 10))
 //    println(part2(testInput, 20))
     check(part1(testInput, 10) == 26)
 //    check(part2(testInput, 20) == 56000011L)
 
-    val input = readInput("Day15")
+    val input = utils.readInput("Day15")
     println(part1(input, 2000000))
 //    println(part2(input, 4000000))
 }

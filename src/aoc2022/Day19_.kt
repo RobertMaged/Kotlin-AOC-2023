@@ -1,8 +1,8 @@
 package aoc2022
 
-import checkEquals
+import utils.checkEquals
 
-import sendAnswer
+import utils.sendAnswer
 
 //
 //private sealed class Goods{

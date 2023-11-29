@@ -1,9 +1,9 @@
 package aoc2023
 
-import checkEquals
-import readInput
-import sendAnswer
-import alsoPrintln
+import utils.checkEquals
+import utils.readInput
+import utils.sendAnswer
+import utils.alsoPrintln
 
 fun main() = with(Day${DAY_NUMBER_FULL}) {
 

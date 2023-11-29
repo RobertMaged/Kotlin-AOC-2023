@@ -1,8 +1,8 @@
 package aoc2022
 
-import checkEquals
+import utils.checkEquals
 
-import sendAnswer
+import utils.sendAnswer
 
 fun main() {
     data class Valve(val name :String,val rate:Int, val que : Set<String>, var isOpen :Boolean = false)

@@ -391,7 +391,7 @@ data class Rope2(val n: Int = 9) {
 
     val vistedTail = hashSetOf(0 to 0) //x, y
 
-    operator fun get(n: Int): Rope2 {
+    operator fun utils.get(n: Int): Rope2 {
         var tail = this
         repeat(n) {
             tail = tail.child!!

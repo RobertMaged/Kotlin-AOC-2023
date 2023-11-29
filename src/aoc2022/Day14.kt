@@ -1,11 +1,6 @@
 package aoc2022
 
-import Vertex
-import checkEquals
-import get
-import getOrDefault
-import set
-
+import utils.*
 import kotlin.math.max
 
 private const val ROCK = -1

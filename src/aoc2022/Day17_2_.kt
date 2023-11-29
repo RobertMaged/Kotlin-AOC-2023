@@ -1,9 +1,9 @@
 package aoc2022
 
-import Vertex
-import checkEquals
+import utils.Vertex
+import utils.checkEquals
 
-import sendAnswer
+import utils.sendAnswer
 
 /*
 ####    the - shape falls first, sixth, 11th, 16th, etc.

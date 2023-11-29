@@ -1,7 +1,7 @@
 package aoc2022
 
-import checkEquals
-import sendAnswer
+import utils.checkEquals
+import utils.sendAnswer
 import java.util.*
 import kotlin.collections.ArrayDeque
 
