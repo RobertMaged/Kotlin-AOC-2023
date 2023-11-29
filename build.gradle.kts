@@ -1,12 +1,13 @@
-import kotlinx.benchmark.gradle.*
-import org.jetbrains.kotlin.allopen.gradle.*
-import org.jetbrains.kotlin.gradle.tasks.*
+import kotlinx.benchmark.gradle.JvmBenchmarkTarget
+import kotlinx.benchmark.gradle.benchmark
+import org.jetbrains.kotlin.allopen.gradle.AllOpenExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
-    kotlin("jvm") version "1.7.22"
+    kotlin("jvm") version "1.9.21"
 
-    kotlin("plugin.allopen") version "1.7.22"
+    kotlin("plugin.allopen") version "1.9.21"
     id("org.jetbrains.kotlinx.benchmark") version "0.4.6"
 
 }
@@ -29,7 +30,7 @@ tasks {
 
 
     wrapper {
-        gradleVersion = "7.6"
+        gradleVersion = "8.4"
     }
 }
 dependencies {
@@ -47,7 +48,7 @@ configure<AllOpenExtension> {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
