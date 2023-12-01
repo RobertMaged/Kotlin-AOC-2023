@@ -5,7 +5,7 @@ import utils.readInput
 import utils.sendAnswer
 import utils.alsoPrintln
 
-fun main() = with(Day${DAY_NUMBER_FULL}) {
+fun main(): Unit = with(Day${DAY_NUMBER_FULL}) {
 
     part1(testInput).checkEquals(TODO())
     part1(input)
@@ -17,11 +17,6 @@ fun main() = with(Day${DAY_NUMBER_FULL}) {
 }
 
 object Day${DAY_NUMBER_FULL} {
-    val input
-        get() = readInput("Day${DAY_NUMBER_FULL}", "aoc2023")
-
-    val testInput
-        get() = readInput("Day${DAY_NUMBER_FULL}_test", "aoc2023")
 
     fun part1(input: List<String>): Int {
         return input.size
@@ -30,4 +25,11 @@ object Day${DAY_NUMBER_FULL} {
     fun part2(input: List<String>): Int {
         return input.size
     }
+    
+    val input
+        get() = readInput("Day${DAY_NUMBER_FULL}", "aoc2023")
+
+    val testInput
+        get() = readInput("Day${DAY_NUMBER_FULL}_test", "aoc2023")
+
 }
