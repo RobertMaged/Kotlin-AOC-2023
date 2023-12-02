@@ -18,10 +18,8 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
 
 inline fun <reified T: Any> T.alsoPrintln(): T = this.also(::println)
 
-fun String.checkEquals(expected: String): String = this.also { check(it == expected){"\nExpected: $expected\n Found: $this"} }
-
-inline fun <reified T: Number> T.checkEquals(expected: T): T = this.also { check(it == expected){"\nExpected: $expected\nFound: $this"} }
-inline fun <reified T: Number> T.checkNotEquals(notExpected: T): T = this.also { check(it != notExpected){"\nThe not expected value is Found: $notExpected\n"} }
+inline fun <reified T: Any> T.checkEquals(expected: T): T = this.also { check(it == expected){"\nExpected: $expected\nFound: $this"} }
+inline fun <reified T: Any> T.checkNotEquals(notExpected: T): T = this.also { check(it != notExpected){"\nThe not expected value is Found: $notExpected\n"} }
 
 fun String.sendAnswer(part: Int, day:String, year: Int) = sendResult(
     day = day,
