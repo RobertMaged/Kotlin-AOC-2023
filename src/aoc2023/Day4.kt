@@ -21,7 +21,6 @@ object Day4 {
 
     fun part1(input: List<String>): Int = input.sumOf { line ->
 
-
         val (winningNums, myNums) = line.substringAfter(":").split(" | ")
             .map {
                 it.trim().split(spaceRegex)
@@ -38,43 +37,41 @@ object Day4 {
     }
 
     fun part2(input: List<String>): Int {
-        val cardToProcess = IntArray(input.size) { 1 }
-        val cardToProcessLog = IntArray(input.size) { 1 }
+        val cardsCurrentInstances = IntArray(input.size) { 1 }
+        val cardsInstancesLog = IntArray(input.size) { 1 }
 
-        val cardCachedResultProcess = Array<(() -> Unit)?>(input.size) { null }
+        val cardWinningCachedProcess = Array<(() -> Unit)?>(input.size) { null }
 
-        var cardNum = 1
-        fun cardPosition() = cardNum - 1
+        var cardPos = 0
 
-        while (cardNum <= input.size) {
-            cardToProcess[cardPosition()] = cardToProcess[cardPosition()] - 1
+        while (cardPos <= input.lastIndex) {
+            cardsCurrentInstances[cardPos] = cardsCurrentInstances[cardPos] - 1
 
-            if (cardCachedResultProcess[cardPosition()] == null) {
+            if (cardWinningCachedProcess[cardPos] == null) {
 
-                val (winningNums, myNums) = input[cardPosition()].substringAfter(":").split(" | ")
+                val (winningNums, myNums) = input[cardPos].substringAfter(":").split(" | ")
                     .map {
                         it.trim().split(spaceRegex)
                     }
 
                 val winCount = myNums.count { it in winningNums }
 
-                cardCachedResultProcess[cardPosition()] = {
-                    for (winingCopyCard in ((cardNum + 1)..cardNum + winCount)) {
-                        val copyCardPosition = winingCopyCard - 1
-                        cardToProcess[copyCardPosition] = cardToProcess[copyCardPosition] + 1
-                        cardToProcessLog[copyCardPosition] = cardToProcessLog[copyCardPosition] + 1
+                cardWinningCachedProcess[cardPos] = {
+                    for (winingCopyCard in (cardPos + 1)..cardPos + winCount) {
+                        cardsCurrentInstances[winingCopyCard] = cardsCurrentInstances[winingCopyCard] + 1
+                        cardsInstancesLog[winingCopyCard] = cardsInstancesLog[winingCopyCard] + 1
                     }
                 }
             }
 
-            cardCachedResultProcess[cardPosition()]!!.invoke()
+            cardWinningCachedProcess[cardPos]!!.invoke()
 
-            if (cardToProcess[cardPosition()] < 1)
-                cardNum++
+            if (cardsCurrentInstances[cardPos] < 1)
+                cardPos++
 
         }
 
-        return cardToProcessLog.sum()
+        return cardsInstancesLog.sum()
     }
 
     val input
