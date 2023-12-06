@@ -9,20 +9,22 @@ fun main(): Unit = with(Day${DAY_NUMBER_FULL}) {
 
     part1(testInput).checkEquals(TODO())
     part1(input)
+        .alsoPrintln()
         .sendAnswer(part = 1, day = "${DAY_NUMBER_FULL}", year = 2023)
 
     part2(testInput).checkEquals(TODO())
     part2(input)
+        .alsoPrintln()
         .sendAnswer(part = 2, day = "${DAY_NUMBER_FULL}", year = 2023)
 }
-
+private typealias PuzzleNum = Int
 object Day${DAY_NUMBER_FULL} {
 
-    fun part1(input: List<String>): Int {
+    fun part1(input: List<String>): PuzzleNum {
         return input.size
     }
 
-    fun part2(input: List<String>): Int {
+    fun part2(input: List<String>): PuzzleNum {
         return input.size
     }
     

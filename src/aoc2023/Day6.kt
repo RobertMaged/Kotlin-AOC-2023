@@ -1,7 +1,7 @@
 package aoc2023
 
 import utils.checkEquals
-import utils.readInput
+import utils.readInputAsText
 
 fun main(): Unit = with(Day6) {
 
@@ -18,44 +18,34 @@ fun main(): Unit = with(Day6) {
 
 object Day6 {
 
-    fun part1(input: List<String>): Int {
-        val times = "\\d+".toRegex().findAll(input[0]).map { it.value.toInt() }
-        val diss = "\\d+".toRegex().findAll(input[1]).map { it.value.toInt() }
+    private fun String.extractAllNums() =
+        "\\d+".toRegex().findAll(this).map { it.value.toLong() }.toList()
+
+    fun part1(input: String): Long {
+        val allNums = input.extractAllNums()
+
+        val (times, diss) = allNums.chunked(allNums.size / 2)
+
         val raceMillisToDistancePairs = times.zip(diss)
 
-        var prod = 1
-        for ((time, dis) in raceMillisToDistancePairs) {
-            var recordBeatCount = 0
-            var buttonHold = 0
-
-            while (buttonHold <= time) {
-                val leftTime = time - buttonHold
-                val raceDistance = leftTime * buttonHold
-
-                if (raceDistance > dis)
-                    recordBeatCount++
-
-                buttonHold++
-            }
-
-            prod *= recordBeatCount
+        return raceMillisToDistancePairs.fold(1) { prod, (time, dis) ->
+            prod * countRecordBeat(time, dis)
         }
 
-        return prod
     }
 
-    fun part2(input: List<String>): Int {
-        val time = "\\d+".toRegex().findAll(input[0])
-            .map { it.value }
-            .fold("") { acc, s -> acc + s }
-            .toLong()
+    fun part2(input: String): Long {
+        val allNums = input.extractAllNums()
 
-        val dis = "\\d+".toRegex().findAll(input[1])
-            .map { it.value }
-            .fold("") { acc, s -> acc + s }
-                .toLong()
+        val (time, dis) = allNums.chunked(allNums.size / 2).map {
+            it.joinToString(separator = "").toLong()
+        }
 
-        var recordBeatCount = 0
+        return countRecordBeat(time, dis)
+    }
+
+    private fun countRecordBeat(time: Long, dis: Long): Long {
+        var recordBeatCount = 0L
         var buttonHold = 0L
 
         while (buttonHold <= time) {
@@ -72,9 +62,9 @@ object Day6 {
     }
 
     val input
-        get() = readInput("Day6", "aoc2023")
+        get() = readInputAsText("Day6", "aoc2023")
 
     val testInput
-        get() = readInput("Day6_test", "aoc2023")
+        get() = readInputAsText("Day6_test", "aoc2023")
 
 }
