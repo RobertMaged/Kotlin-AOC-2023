@@ -20,14 +20,14 @@ fun main(): Unit = with(Day16) {
 
 
 object Day16 {
-    private enum class Dir {
+    enum class Dir {
         up, down, left, right
     }
 
-    private infix fun Vertex.to(d: Dir) = VertexToDir(this, d)
-    private data class VertexToDir(val vertex: Vertex, val dir: Dir)
+    infix fun Vertex.to(d: Dir) = VertexToDir(this, d)
+    data class VertexToDir(val vertex: Vertex, val dir: Dir)
 
-    private operator fun Array<CharArray>.get(v: Vertex) = this.getOrNull(v.y)?.getOrNull(v.x) ?: '#'
+    operator fun Array<CharArray>.get(v: Vertex) = this.getOrNull(v.y)?.getOrNull(v.x) ?: '#'
 
     fun part1(input: Array<CharArray>): Int = input.countEnergized(Vertex(0, 0) to Dir.right)
 
@@ -58,7 +58,7 @@ object Day16 {
 
     }
 
-    private fun Array<CharArray>.countEnergized(start: VertexToDir): Int {
+    fun Array<CharArray>.countEnergized(start: VertexToDir): Int {
 
         val energized = hashSetOf<VertexToDir>()
 
