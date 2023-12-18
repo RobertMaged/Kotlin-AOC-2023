@@ -18,6 +18,8 @@ data class Vertex(val x: Int, val y: Int) {
     fun coerceAtMostHorizontally(maximumVertex: Vertex): Vertex =
         if (this.x > maximumVertex.x) maximumVertex else this
 
+    fun isInBounds(rowsR: IntRange, colsR: IntRange): Boolean = x in colsR && y in rowsR
+
     fun up(steps: Int = 1) = copy(y = y - steps)
     fun down(steps: Int = 1) = copy(y = y + steps)
 
